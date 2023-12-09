@@ -11,23 +11,29 @@
 # **************************************************************************** #
 
 ########## VARIABLES ##########
+EXE			:= minishell
 BIN_PATH	:= ./bin
-NAME		:= $(BIN_PATH)/minishell
-NAME_BONUS	:= $(BIN_PATH)/minishell_bonus
+NAME		:= $(BIN_PATH)/$(EXE)
+NAME_BONUS	:= $(BIN_PATH)/$(EXE)_bonus
 INCLUDE		:= ./inc
 CC			:= gcc
 CFLAGS		:= -Wall -Wextra -Werror -lreadline
 
 # Sources dir
-SUB_PATH := statemachine
+SUB_PATH := test
 
 SRC_PATH	:= src
 SRC			:= main.c \
-				$(SUB_PATH)/thinking.c
+				process_prompt.c \
+				lexer.c
 
 SRC_BONUS_PATH	:= ./src_bonus
 SRC_BONUS	:= main.c \
-				$(SUB_PATH)/thinking.c
+				$(SUB_PATH)/test.c
+
+LIB_PATH	:= ./lib
+LIB_H		:= $(LIB_PATH)/libft.h
+LIB_A		:= $(LIB_PATH)/libft.a
 
 # Objects dir
 OBJ_PATH	:= ./obj
@@ -39,12 +45,12 @@ OBJ_BONUS	:= $(addprefix $(OBJ_BONUS_PATH)/, $(SRC_BONUS:.c=.o))
 
 ########## RULES ##########
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $^ -o $@
+	$(CC) $(CFLAGS) -I $(INCLUDE) -I $(LIB_PATH) -c $^ -o $@
 
 $(OBJ_BONUS_PATH)/%.o: $(SRC_BONUS_PATH)/%.c | $(OBJ_BONUS_PATH)
-	$(CC) $(CFLAGS) -I $(INCLUDE) -c $^ -o $@
+	$(CC) $(CFLAGS) -I $(INCLUDE) -I $(LIB_PATH) -c $^ -o $@
 
-all: philo
+all: $(EXE)
 
 re: fclean all
 
@@ -57,17 +63,23 @@ fclean:	clean
 	rm -rf $(BIN_PATH)
 	rm -rf *.out
 
+libft: | $(LIB_PATH)
+	$(MAKE) -C $(LIB_PATH)/libft fclean
+	$(MAKE) -C $(LIB_PATH)/libft all
+	cp $(LIB_PATH)/libft/libft.a $(LIB_A)
+	cp $(LIB_PATH)/libft/libft.h $(LIB_H)
+
 
 # Binaries
-minishell: $(NAME)
+$(EXE): $(NAME)
 
 $(NAME) : $(OBJ) | $(BIN_PATH)
-	$(CC) $(CFLAGS) $(OBJ) -o $@
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LIB_A)
 
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS) : $(OBJ_BONUS) | $(BIN_PATH)
-	$(CC) $(CFLAGS) $(OBJ_BONUS) -o $@
+	$(CC) $(CFLAGS) $(OBJ_BONUS) -o $@ $(LIB_A)
 
 
 # Debug
