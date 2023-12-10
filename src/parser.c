@@ -20,28 +20,31 @@ char	**parser(char	**tokens)
 	char			**cmds_table;
 	unsigned int	tokens_len;
 	unsigned int	pipes;
+	unsigned int	index;
 
 	pipes = 0;
 	tokens_len = 0;
 	while (tokens[tokens_len])
 	{
-		if (tokens[tokens_len] == PIPE)
+		if (tokens[tokens_len][0] == PIPE)
 			pipes++;
 		tokens_len++;
 	}
 	cmds_table = malloc((pipes + 1) * sizeof(*cmds_table));
 	if (!cmds_table)
 		return (NULL);
-	while(pipes)
+	index = 0;
+	cmds_table[index] = ft_strdup(tokens[tokens_len]);
+	while(index <= pipes)
 	{
 		while(tokens_len)
 		{
 			if (tokens[tokens_len][0] == PIPE)
 				break;
-			cmds_table = ft_strjoin(cmds_table, tokens[tokens_len]);
-			tokens_len--
+			cmds_table[index] = ft_strjoin(cmds_table[index], tokens[tokens_len]);
+			tokens_len--;
 		}
-		pipes--;
+		index++;
 	}
 	return (cmds_table);
 }
