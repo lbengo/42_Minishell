@@ -2,7 +2,7 @@
 #include "libft.h"
 
 /*
-Take de tokens froms lexer and return a structured table.
+Take the tokens from lexer and return a structured table.
 
 Return example:
 +-------------+-------------+--------------+-------+-------+
