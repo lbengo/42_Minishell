@@ -20,16 +20,20 @@ CC			:= gcc
 CFLAGS		:= -Wall -Wextra -Werror -lreadline
 
 # Sources dir
-SUB_PATH := test
+UTILS_PATH := utils
 
 SRC_PATH	:= src
 SRC			:= main.c \
 				process_prompt.c \
-				lexer.c
+				lexer.c \
+				parser.c \
+				$(UTILS_PATH)/is_special_char.c \
+				$(UTILS_PATH)/is_special_string.c
 
 SRC_BONUS_PATH	:= ./src_bonus
 SRC_BONUS	:= main.c \
-				$(SUB_PATH)/test.c
+				$(UTILS_PATH)/is_special_char.c \
+				$(UTILS_PATH)/is_special_string.c
 
 LIB_PATH	:= ./lib
 LIB_H		:= $(LIB_PATH)/libft.h
@@ -106,11 +110,11 @@ run: $(NAME)
 # Create dirs
 $(OBJ_PATH):
 	mkdir -p $@
-	mkdir -p $@/$(SUB_PATH)
+	mkdir -p $@/$(UTILS_PATH)
 
 $(OBJ_BONUS_PATH):
 	mkdir -p $@
-	mkdir -p $@/$(SUB_PATH)
+	mkdir -p $@/$(UTILS_PATH)
 
 $(BIN_PATH):
 	mkdir -p $@

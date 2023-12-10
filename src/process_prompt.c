@@ -10,11 +10,12 @@
 char	process_prompt(char	*prompt)
 {
 	char	**tokens;
-	char	**cmds;
+	char	**cmds_table;
 
 	tokens = lexer(prompt);
-	//cmds = parser(tokens);
-	//expand(*cmds);
+	cmds_table = parser(tokens);
 	ft_doublefree(tokens);
+	//expand(*cmds_table);
+	ft_doublefree(cmds_table);
 	return (0);
 }

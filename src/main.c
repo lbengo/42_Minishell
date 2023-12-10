@@ -1,26 +1,25 @@
 #include "minishell.h"
-#include <stdlib.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static char end(void)
+static char	end(void)
 {
 	printf("exit\n");
 	exit (0);
 }
 
-int main(int argc, char const *argv[], char *envp[])
+int	main(int argc, char const *argv[], char *envp[])
 {
 	char	*prompt;
 
-	prompt = (char *)NULL;
+	prompt = (char *) NULL;
 	while (1)
 	{
 		if (prompt)
 		{
 			free (prompt);
-			prompt = (char *)NULL;
+			prompt = (char *) NULL;
 		}
 		prompt = readline("minishell> ");
 		if (!prompt)
