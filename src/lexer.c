@@ -1,5 +1,7 @@
 #include "minishell.h"
 #include "libft.h"
+
+// TODO delete includes
 #include <stdio.h>
 
 static size_t	count_tokens(char *str)
@@ -101,16 +103,17 @@ char	**lexer(char *prompt)
 	if (!prompt)
 		return (NULL);
 	token_nbr = count_tokens(prompt);
-	printf("%i\n", count_tokens(prompt));
+	printf("LEXER tokens counter: %i\n", count_tokens(prompt));
 
-	tokens = malloc((token_nbr + 1) * sizeof(*tokens));
-	if (tokens)
-	{
-		get_tokens(tokens, prompt, token_nbr);
-		tokens[token_nbr] = NULL;
-	}
+	tokens = ft_calloc(token_nbr + 1, sizeof(*tokens));
+	if (!tokens)
+		return (NULL);
+	get_tokens(tokens, prompt, token_nbr);
 	int	i = 0;
 	while (tokens[i])
-		printf("%s\n", tokens[i++]);
+	{
+		printf("LEXER token[%i]: %s\n", i, tokens[i]);
+		i++;
+	}
 	return (tokens);
 }
