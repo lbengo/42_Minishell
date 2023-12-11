@@ -27,6 +27,7 @@ SRC			:= main.c \
 				process_prompt.c \
 				lexer.c \
 				parser.c \
+				expand.c \
 				$(UTILS_PATH)/is_special_char.c \
 				$(UTILS_PATH)/is_special_string.c
 
