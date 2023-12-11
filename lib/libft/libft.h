@@ -100,6 +100,8 @@ size_t			ft_nbrlen(long int nbr, int base);
 size_t			ft_unbrlen(size_t nbr, int base);
 int				ft_max(int nbr1, int nbr2);
 char			ft_doublefree(char **table);
+char			ft_triplefree(char ***table);
 char			**ft_tablecpy(char **table);
 unsigned int	ft_tablerows(char **table);
+int				ft_find_char(const char *str, char c);
 #endif
