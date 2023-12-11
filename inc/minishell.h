@@ -15,6 +15,8 @@
 # define GREATGREAT ">>"
 # define LESSLESS "<<"
 # define PIPE '|'
+# define DOLLAR '$'
+# define QUESTION_MARK '?'
 # define OR "||"
 # define AND "&&"
 # define OPEN_BRACKET '('
@@ -29,15 +31,19 @@ typedef struct s_cmd {
 
 // process_prompt.c
 
-char	process_prompt(char	*prompt);
+char	process_prompt(char *prompt);
 
 // lexer.c
 
-char	**lexer(char	*prompt);
+char	**lexer(char *prompt);
 
 // parser.c
 
-char	**parser(char	**tokens);
+char	***parser(char **tokens);
+
+// expand.c
+
+char	expand(char ***parser_table);
 
 // utils
 
