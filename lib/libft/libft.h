@@ -85,13 +85,20 @@ char			*ft_substr(char const *s, unsigned int start, size_t len);
 
 /* ---------- Extended ---------- */
 /* <stdio.h> */
+
 int				ft_putchar(int c);
 int				ft_puts(const char *s);
 
 /* <stdlib.h> */
+
 int				ft_abs(int nbr);
 
+/* <string.h> */
+
+int				ft_strcmp(const char *s1, const char *s2);
+
 /* Non-standard C Library */
+
 unsigned int	ft_putnbr_base(int nbr, const char *base);
 unsigned int	ft_putunbr_base(unsigned int nbr, const char *base);
 unsigned int	ft_putulnbr_base(size_t nbr, const char *base);

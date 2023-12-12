@@ -21,8 +21,6 @@ ARFLAGS		= rsc
 OBJ_PATH		= ./obj
 EXTENDED_PATH	= extended
 OBJ_EXT_PATH	= $(OBJ_PATH)/$(EXTENDED_PATH)
-OBJ_GNL			= $(shell find ../../../lvl1/get_next_line/obj/*.o)
-OBJ_PRINTF		= $(shell find ../../../lvl1/printf/obj/*.o)
 
 #MANDATORY_SRC := $(shell find . \( -name '*.c' -a -not -name '*_bonus.c' -a -not -name 'main.c' \))
 MANDATORY_SRC := ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
@@ -43,6 +41,7 @@ BONUS_OBJ = $(addprefix $(OBJ_PATH)/, $(BONUS_SRC:.c=.o))
 
 EXTENDED_SRC := ft_putchar.c ft_puts.c \
 	ft_abs.c \
+	ft_strcmp.c \
 	ft_putnbr_base.c ft_putunbr_base.c ft_putulnbr_base.c ft_putnchar_fd.c ft_nbrlen.c ft_unbrlen.c \
 	ft_max.c \
 	ft_doublefree.c ft_triplefree.c ft_tablecpy.c ft_tablerows.c \
