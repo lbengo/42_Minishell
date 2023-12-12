@@ -43,7 +43,7 @@ static char	expand_dollar(char **str, int dollar_pos)
 	return (0);
 }
 
-char	expand(char ***parser_table)
+char	expander(char ***parser_table)
 {
 	int	row;
 	int	column;

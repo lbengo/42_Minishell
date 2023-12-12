@@ -6,22 +6,24 @@
 
 static size_t	count_tokens(char *str)
 {
-	size_t	tokens;
-	char	is_delimiter;
+	size_t			tokens;
+	char			is_delimiter;
+	unsigned int	i;
 
 	tokens = 0;
 	is_delimiter = 1;
-	while (*str)
+	i = 0;
+	while (str[i])
 	{
-		if (*str == SPACE || *str == TAB)
+		if (str[i] == SPACE || str[i] == TAB)
 			is_delimiter = 1;
-		else if (is_special_string(str))
+		else if (is_special_string(&str[i]))
 		{
 			tokens += 1;
 			is_delimiter = 1;
-			*str++;
+			i++;
 		}
-		else if (is_special_char(*str))
+		else if (is_special_char(str[i]))
 		{
 			tokens += 1;
 			is_delimiter = 1;
@@ -31,7 +33,7 @@ static size_t	count_tokens(char *str)
 			tokens += is_delimiter;
 			is_delimiter = 0;
 		}
-		*str++;
+		i++;
 	}
 	if (!tokens && is_delimiter)
 		return (0);
@@ -103,7 +105,7 @@ char	**lexer(char *prompt)
 	if (!prompt)
 		return (NULL);
 	token_nbr = count_tokens(prompt);
-	printf("LEXER tokens counter: %i\n", count_tokens(prompt));
+	printf("LEXER tokens counter: %zu\n", count_tokens(prompt));
 
 	tokens = ft_calloc(token_nbr + 1, sizeof(*tokens));
 	if (!tokens)
@@ -112,7 +114,7 @@ char	**lexer(char *prompt)
 	int	i = 0;
 	while (tokens[i])
 	{
-		printf("LEXER token[%i]: %s\n", i, tokens[i]);
+		printf("LEXER token[%d]: %s\n", i, tokens[i]);
 		i++;
 	}
 	return (tokens);

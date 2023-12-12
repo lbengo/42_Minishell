@@ -24,9 +24,8 @@ static unsigned int	get_table_rows(char **tokens)
 }
 
 /* Get the row's token number until next pipe */
-static unsigned int	get_rows_column(unsigned int actual_row, char **tokens)
+static unsigned int	get_rows_column(char **tokens)
 {
-	unsigned int	row;
 	unsigned int	token_nbr;
 
 	token_nbr = 0;
@@ -48,11 +47,11 @@ static char	fill_table_cmds(char ***table, char **tokens, unsigned int tot_rows)
 	row = 0;
 	column = 0;
 	token = 0;
-	table[row] = ft_calloc(get_rows_column(row, &tokens[token]) + 1, sizeof(*table));
+	table[row] = ft_calloc(get_rows_column(&tokens[token]) + 1, sizeof(*table));
 	while(tokens[token])
 	{
 		if (row >= tot_rows)
-			return (1, printf("PARSER ERROR: Commands table rows exceeded.\n"));
+			return (printf("PARSER ERROR: Commands table rows exceeded.\n"), 1);
 		if (tokens[token][0] == PIPE)
 		{
 			token++;
@@ -60,7 +59,7 @@ static char	fill_table_cmds(char ***table, char **tokens, unsigned int tot_rows)
 			{
 				table[row][column] = NULL;
 				row++;
-				table[row] = ft_calloc(get_rows_column(row, &tokens[token]) + 1, sizeof(*table));
+				table[row] = ft_calloc(get_rows_column(&tokens[token]) + 1, sizeof(*table));
 				column = 0;
 			}
 		}
@@ -75,21 +74,25 @@ static char	fill_table_cmds(char ***table, char **tokens, unsigned int tot_rows)
 Take the tokens from lexer and return a structured table.
 
 Return example:
-+-------------+-------------+--------------+-------+-------+
-| cmd_1       | -options    | arg_1        | arg_2 | NULL  |
-+-------------+-------------+--------------+-------+-------+-------+
-| cmd_2       | arg_1       | arg_2        | ...   | arg_n | NULL  |
-+-------------+-------------+--------------+-------+-------+-------+
-| cmd_n       | -options    | NULL         |
-+-------------+-------------+--------------+-------+
-| In: default | Out: file_1 | Err: default | NULL  |
-+-------------+-------------+--------------+-------+
-| NULL        |
-+-------------+
 
-TODO: Cases to define
- - If in the middle of pipeline is a redirection?? -> ls >file1 | grep o
- - where go "&&" on the table
+   Input     Output    Error
+     ↓         ↓         ↓
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| default | <pipe>  | default | cmd_1 | -options | arg_1 | arg_2 | NULL  |     |
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| <pipe>  | default | file_21 | cmd_2 | arg_1    | arg_2 | ...   | arg_n | NULL|
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| file_31 | file_32 | default | cmd_3 | -options | NULL  |       |       |     |
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| ...     | ...     | ...     | ...   | ...      | ...   | ...   | ...   | ... |
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| <pipe>  | default | default | cmd_n | NULL     |       |       |       |     |
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+| NULL    |         |         |       |          |       |       |       |     |
++---------+---------+---------+-------+----------+-------+-------+-------+-----+
+
+TODO
+ - discretize betwen < and << (Override or append)
 */
 char	***parser(char **tokens)
 {

@@ -1,40 +1,35 @@
 #include "minishell.h"
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "libft.h"
 
-static char	end(void)
-{
-	printf("exit\n");
-	exit (0);
-}
 
+/*
+	1. read terminal
+	2. lexer
+	3. parser
+	4. expander
+	5. exec
+*/
 int	main(int argc, char const *argv[], char *envp[])
 {
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	char	*prompt;
+	char	**tokens;
+	char	***cmds_table;
 
-	prompt = (char *) NULL;
 	while (1)
 	{
-		if (prompt)
-		{
-			free (prompt);
-			prompt = (char *) NULL;
-		}
-		prompt = readline("minishell> ");
+		prompt = read_input();
 		if (!prompt)
-			end();
-		if (!prompt[0])
-			continue ;
-		add_history (prompt);
-		// if (strcmp(prompt, "clear") == 0)
-		// 	rl_clear_history();
-		if (strcmp(prompt, "exit") == 0)
-		{
-			free(prompt);
-			end();
-		}
-		process_prompt(prompt);
+			continue;
+		tokens = lexer(prompt);
+		free(prompt);
+		cmds_table = parser(tokens);
+		ft_doublefree(tokens);
+		expander(cmds_table);
+		//exec();
+		ft_triplefree(cmds_table);
 	}
 	return (0);
 }

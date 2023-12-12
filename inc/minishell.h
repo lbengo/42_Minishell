@@ -29,6 +29,10 @@ typedef struct s_cmd {
 
 /* ---------- Functions ---------- */
 
+// read_input.c
+
+char	*read_input(void);
+
 // process_prompt.c
 
 char	process_prompt(char *prompt);
@@ -41,9 +45,9 @@ char	**lexer(char *prompt);
 
 char	***parser(char **tokens);
 
-// expand.c
+// expander.c
 
-char	expand(char ***parser_table);
+char	expander(char ***parser_table);
 
 // utils
 

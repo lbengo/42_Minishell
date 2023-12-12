@@ -16,18 +16,21 @@ BIN_PATH	:= ./bin
 NAME		:= $(BIN_PATH)/$(EXE)
 NAME_BONUS	:= $(BIN_PATH)/$(EXE)_bonus
 INCLUDE		:= ./inc
+
+
 CC			:= gcc
-CFLAGS		:= -Wall -Wextra -Werror -lreadline
+CFLAGS		:= -Wall -Wextra -Werror
+LFLAGS		:= -lreadline
 
 # Sources dir
 UTILS_PATH := utils
 
 SRC_PATH	:= src
 SRC			:= main.c \
-				process_prompt.c \
+				read_input.c \
 				lexer.c \
 				parser.c \
-				expand.c \
+				expander.c \
 				$(UTILS_PATH)/is_special_char.c \
 				$(UTILS_PATH)/is_special_string.c
 
@@ -79,27 +82,27 @@ libft: | $(LIB_PATH)
 $(EXE): $(NAME)
 
 $(NAME) : $(OBJ) | $(BIN_PATH)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LIB_A)
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LIB_A) $(LFLAGS)
 
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS) : $(OBJ_BONUS) | $(BIN_PATH)
-	$(CC) $(CFLAGS) $(OBJ_BONUS) -o $@ $(LIB_A)
+	$(CC) $(CFLAGS) $(OBJ_BONUS) -o $@ $(LIB_A) $(LFLAGS)
 
 
 # Debug
-no_flag: CFLAGS := -lreadline
-no_flag_bonus: CFLAGS := -lreadline
+no_flag: CFLAGS :=
+no_flag_bonus: CFLAGS :=
 no_flag: $(NAME)
 no_flag_bonus: $(NAME_BONUS)
 
-debug: CFLAGS := -g3 -g -D DEBUG=1 -lreadline
-debug_bonus: CFLAGS := -g3 -g -D DEBUG=1 -lreadline
+debug: CFLAGS := -g3 -g -D DEBUG=1
+debug_bonus: CFLAGS := -g3 -g -D DEBUG=1
 debug: $(NAME)
 debug_bonus: $(NAME_BONUS)
 
-faddress: CFLAGS := -g3 -fsanitize=address -lreadline
-faddress_bonus: CFLAGS := -g3 -fsanitize=address -lreadline
+faddress: CFLAGS := -g3 -fsanitize=address
+faddress_bonus: CFLAGS := -g3 -fsanitize=address
 faddress: $(NAME)
 faddress_bonus: $(NAME_BONUS)
 
