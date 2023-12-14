@@ -24,6 +24,7 @@ LFLAGS		:= -lreadline
 
 # Sources dir
 UTILS_PATH := utils
+PARSER_PATH := parser
 
 SRC_PATH	:= src
 SRC			:= main.c \
@@ -31,6 +32,12 @@ SRC			:= main.c \
 				lexer.c \
 				parser.c \
 				expander.c \
+				$(PARSER_PATH)/add_arg.c \
+				$(PARSER_PATH)/add_io.c \
+				$(PARSER_PATH)/add_opt.c \
+				$(PARSER_PATH)/is_append.c \
+				$(PARSER_PATH)/is_heredoc.c \
+				$(UTILS_PATH)/cmdsfree.c \
 				$(UTILS_PATH)/is_special_char.c \
 				$(UTILS_PATH)/is_special_string.c
 
@@ -115,10 +122,12 @@ run: $(NAME)
 $(OBJ_PATH):
 	mkdir -p $@
 	mkdir -p $@/$(UTILS_PATH)
+	mkdir -p $@/$(PARSER_PATH)
 
 $(OBJ_BONUS_PATH):
 	mkdir -p $@
 	mkdir -p $@/$(UTILS_PATH)
+	mkdir -p $@/$(PARSER_PATH)
 
 $(BIN_PATH):
 	mkdir -p $@

@@ -7,7 +7,7 @@
 /*
 NOTE: Rows counter start from 1.
 */
-static unsigned int	get_table_rows(char **tokens)
+static unsigned int	count_total_cmds(char **tokens)
 {
 	unsigned int	tokens_len;
 	unsigned int	rows;
@@ -23,51 +23,63 @@ static unsigned int	get_table_rows(char **tokens)
 	return (rows);
 }
 
-/* Get the row's token number until next pipe */
-static unsigned int	get_rows_column(char **tokens)
+static char	is_io(char *token)
 {
-	unsigned int	token_nbr;
-
-	token_nbr = 0;
-	while (tokens[token_nbr])
-	{
-		if (tokens[token_nbr][0] == PIPE)
-			break;
-		token_nbr++;
-	}
-	return (token_nbr);
+	if (token[0] == GREAT || token[0] == LESS)
+		return (1);
+	return (0);
 }
 
-static char	fill_table_cmds(char ***table, char **tokens, unsigned int tot_rows)
+/*
+The function does not take into account options with double '-'.
+For example "--help". These go to the arguments section.
+*/
+static char	is_option(char *token)
 {
-	unsigned int	row;
-	unsigned int	column;
-	unsigned int	token;
-
-	row = 0;
-	column = 0;
-	token = 0;
-	table[row] = ft_calloc(get_rows_column(&tokens[token]) + 1, sizeof(*table));
-	while(tokens[token])
-	{
-		if (row >= tot_rows)
-			return (printf("PARSER ERROR: Commands table rows exceeded.\n"), 1);
-		if (tokens[token][0] == PIPE)
-		{
-			token++;
-			if (column != 0)
-			{
-				table[row][column] = NULL;
-				row++;
-				table[row] = ft_calloc(get_rows_column(&tokens[token]) + 1, sizeof(*table));
-				column = 0;
-			}
-		}
-		table[row][column] = ft_strdup(tokens[token]);
-		token++;
-		column++;
-	}
+	if (token[0] == '-' && token[1] && token[1] != '-')
+		return (1);
 	return (0);
+}
+
+static t_cmd	*get_cmd(char **tokens, unsigned int *actual_token)
+{
+	t_cmd	*cmd;
+
+	cmd = ft_calloc(1, sizeof(*cmd));
+	while (tokens[*actual_token] && tokens[*actual_token][0] != PIPE)
+	{
+		if (is_io(tokens[*actual_token]))
+		{
+			(*actual_token)++;
+			if (!tokens[*actual_token])
+				return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2), NULL);
+			if (is_io(tokens[*actual_token]))
+				return (ft_putstr_fd("minishell: syntax error near unexpected token\n", 2), NULL);
+			if (tokens[*actual_token][0] == PIPE)
+				return (ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2), NULL);
+			add_io(&cmd, tokens[*actual_token], tokens[*actual_token - 1]);
+			printf("PARSER cmd io: %s\n", tokens[*actual_token]);
+		}
+		else if (!cmd->exec && !cmd->opts && !cmd->args)
+		{
+			cmd->exec = ft_strdup(tokens[*actual_token]);
+			printf("PARSER cmd exec: %s\n", tokens[*actual_token]);
+		}
+		else if (is_option(tokens[*actual_token]))
+		{
+			add_opt(&cmd->opts, tokens[*actual_token]);
+			printf("PARSER cmd opt: %s\n", tokens[*actual_token]);
+		}
+		else
+		{
+			add_arg(&cmd->args, tokens[*actual_token]);
+			printf("PARSER cmd arg: %s\n", tokens[*actual_token]);
+		}
+		(*actual_token)++;
+	}
+	if (tokens[*actual_token] && tokens[*actual_token][0] == PIPE)
+		(*actual_token)++;
+	return (cmd);
 }
 
 /*
@@ -92,31 +104,45 @@ Return example:
 +---------+---------+---------+-------+----------+-------+-------+-------+-----+
 
 TODO
- - discretize betwen < and << (Override or append)
+ - discretize between < and << (Override or append)
 */
-char	***parser(char **tokens)
+t_cmd	**parser(char **tokens)
 {
-	char			***table;
-	unsigned int	rows;
+	t_cmd			**cmds;
+	unsigned int	cmds_nbr;
+	unsigned int	i;
+	unsigned int	j;
 
-	rows = get_table_rows(tokens);
-	printf("PARSER cmds_table rows: %u\n", rows);
-	table = ft_calloc(rows + 2, sizeof(*table));
-	if (!table)
+	cmds_nbr = count_total_cmds(tokens);
+	printf("PARSER total cmds: %u\n", cmds_nbr);
+	cmds = ft_calloc(cmds_nbr + 1, sizeof(*cmds));
+	if (!cmds)
 		return (NULL);
-	fill_table_cmds(table, tokens, rows);
-	//fill_table_io(table, tokens, rows);
-	int	row = 0;
-	int	column = 0;
-	while (table[row])
+	i = 0;
+	j = 0;
+	while(tokens[i])
 	{
-		while (table[row][column])
-		{
-			printf("PARSER table[%i][%i]: %s\n", row, column, table[row][column]);
-			column++;
-		}
-		column = 0;
-		row++;
+		cmds[j] = get_cmd(tokens, &i);
+		if (!cmds[j])
+			return (cmdsfree(cmds), NULL);
+		j++;
 	}
-	return (table);
+
+
+
+	int	index = 0;
+	while (cmds[index])
+	{
+		printf("PARSER cmds[%i]\n", index);
+		printf("\tin  : %s\n", cmds[index]->in);
+		printf("\theredoc : %i\n", cmds[index]->heredoc);
+		printf("\tout : %s\n", cmds[index]->out);
+		printf("\tappend : %i\n", cmds[index]->append);
+		printf("\terr : %s\n", cmds[index]->err);
+		printf("\texec: %s\n", cmds[index]->exec);
+		printf("\topt : %s\n", cmds[index]->opts);
+		printf("\targs: %s\n", cmds[index]->args);
+		index++;
+	}
+	return (cmds);
 }

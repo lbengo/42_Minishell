@@ -16,7 +16,7 @@ int	main(int argc, char const *argv[], char *envp[])
 	(void)envp;
 	char	*prompt;
 	char	**tokens;
-	char	***cmds_table;
+	t_cmd	**cmds;
 
 	while (1)
 	{
@@ -25,11 +25,11 @@ int	main(int argc, char const *argv[], char *envp[])
 			continue;
 		tokens = lexer(prompt);
 		free(prompt);
-		cmds_table = parser(tokens);
+		cmds = parser(tokens);
 		ft_doublefree(tokens);
-		expander(cmds_table);
+		//expander(cmds_table);
 		//exec();
-		ft_triplefree(cmds_table);
+		cmdsfree(cmds);
 	}
 	return (0);
 }
