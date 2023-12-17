@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "parser.h"
 #include "libft.h"
 
 char	add_io(t_cmd **cmd, char *new_io, char *io_opt)

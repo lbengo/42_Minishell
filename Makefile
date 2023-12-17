@@ -30,13 +30,13 @@ SRC_PATH	:= src
 SRC			:= main.c \
 				read_input.c \
 				lexer.c \
-				parser.c \
 				expander.c \
 				$(PARSER_PATH)/add_arg.c \
 				$(PARSER_PATH)/add_io.c \
 				$(PARSER_PATH)/add_opt.c \
 				$(PARSER_PATH)/is_append.c \
 				$(PARSER_PATH)/is_heredoc.c \
+				$(PARSER_PATH)/parser.c \
 				$(UTILS_PATH)/cmdsfree.c \
 				$(UTILS_PATH)/is_special_char.c \
 				$(UTILS_PATH)/is_special_string.c
