@@ -31,6 +31,7 @@ SRC			:= main.c \
 				read_input.c \
 				lexer.c \
 				expander.c \
+				exec.c \
 				$(PARSER_PATH)/add_arg.c \
 				$(PARSER_PATH)/add_io.c \
 				$(PARSER_PATH)/add_opt.c \
@@ -112,6 +113,9 @@ faddress: CFLAGS := -g3 -fsanitize=address
 faddress_bonus: CFLAGS := -g3 -fsanitize=address
 faddress: $(NAME)
 faddress_bonus: $(NAME_BONUS)
+
+fstrict: CFLAGS += -g3 -fsanitize=address
+fstrict: $(NAME)
 
 # tests
 run: $(NAME)

@@ -29,7 +29,7 @@ int	main(int argc, char const *argv[], char *envp[])
 		cmds = parser(tokens);
 		ft_doublefree(tokens);
 		//expander(cmds_table);
-		//exec();
+		//exec(cmds);
 		cmdsfree(cmds);
 	}
 	return (0);
