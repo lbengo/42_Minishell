@@ -1,0 +1,29 @@
+grep l <file1
+	file 1: line1
+	file 1: line
+<file1 grep l
+	file 1: line1
+	file 1: line
+<file1 grep e <file2
+	file 2: line1
+	file 2: line2
+<file1 <file2 cat
+	file 2: line1
+	file 2: line2
+<file1 | cat
+<file1
+	-
+>fileout
+<file1 >fileout
+<file1 cat | >fileout
+	*Se crea el fichero pero no se guarda nada
+ls file>file
+	*al crear primero el archivo "file", "ls" lo encuentra
+ls >
+	bash: syntax error near unexpected token `newline'
+ ls | ls >><| ls
+	bash: syntax error near unexpected token `<'
+	*Como primero chequea los io ni siquiera ejecuta los comandos
+
+e"ch"o hola
+	hola

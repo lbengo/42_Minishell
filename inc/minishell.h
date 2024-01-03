@@ -37,7 +37,7 @@ typedef struct s_cmd {
 	char	*err; // el error me lo rediriges al fichero escrito en err
 	char	*exec;
 	char	*opts;
-	char	*args;
+	char	**args;
 }	t_cmd;
 
 /* ---------- Functions ---------- */
