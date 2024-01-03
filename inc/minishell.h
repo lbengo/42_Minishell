@@ -33,7 +33,7 @@ typedef struct s_cmd {
 	char	*err;
 	char	*exec;
 	char	*opts;
-	char	*args;
+	char	**args;
 }	t_cmd;
 
 /* ---------- Functions ---------- */
